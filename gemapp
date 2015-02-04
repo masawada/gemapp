@@ -83,6 +83,7 @@ _install_gems() {
   BUNDLE_GEMFILE=$APP_GEMFILE bundle install --path vendor/bundle
   if test $? -ne 0 ; then
     rm -rf $APP_DIR
+    rm -rf $APP_BIN
     echo "Failed to install $GEM_NAME."
     exit 1
   fi
