@@ -47,10 +47,16 @@ install() {
 }
 
 _create_gemfile() {
+  if ! test -z $GIT_REPO ; then
+    APP_GIT_REPO=', :git => "'${GIT_REPO}'"'
+  else
+    APP_GIT_REPO=''
+  fi
+
   cat << _EOF_ > $APP_GEMFILE
 source 'https://rubygems.org'
 
-gem '$GEM_NAME'
+gem '$GEM_NAME'$APP_GIT_REPO
 _EOF_
 }
 
