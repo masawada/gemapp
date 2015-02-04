@@ -12,7 +12,7 @@ fi
 
 # functions
 usage() {
-  echo "Usage: $APP_NAME [-g|--git-repo <uri>] <gem_name>"
+  echo "Usage: $APP_NAME [-r|--remove] [-g|--git-repo <uri>] <gem_name>"
   exit 1
 }
 
@@ -28,8 +28,19 @@ validate_option() {
   fi
 }
 
+# install functions
+install() {
+  echo 'install' $GEM_NAME
+}
+
+# remove functions
+uninstall() {
+  echo 'uninstall' $GEM_NAME
+}
+
 # main
 ## analyze options
+REMOVE_FLAG=0
 for OPT in "$@"
 do
   case "$OPT" in
@@ -43,6 +54,10 @@ do
       validate_option $1 $2
       GIT_REPO="$2"
       shift 2
+      ;;
+    '-r' | '--remove' )
+      REMOVE_FLAG=1
+      shift 1
       ;;
     -*)
       echo "$APP_NAME: illegal option -- '$(echo $1 | sed 's/^-*//')'" 1>&2
@@ -59,4 +74,10 @@ done
 # check GEM_NAME
 if test -z $GEM_NAME; then
   usage
+fi
+
+if test $REMOVE_FLAG -eq 1; then
+  uninstall
+else
+  install
 fi
