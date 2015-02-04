@@ -30,7 +30,39 @@ validate_option() {
 
 # install functions
 install() {
+
+  # check if app already exists
+  if test -d $APP_DIR ; then
+    echo "app ${GEM_NAME} already exists."
+    exit 1
+  fi
+
+  mkdir $APP_DIR
+
+  _create_gemfile
+  _create_binfile
+  _install_gems
+
   echo 'install' $GEM_NAME
+}
+
+_create_gemfile() {
+  cat << _EOF_ > $APP_GEMFILE
+source 'https://rubygems.org'
+
+gem '$GEM_NAME'
+_EOF_
+}
+
+_create_binfile() {
+  cat << _EOF_ > $APP_BIN
+BUNDLE_GEMFILE=$APP_GEMFILE bundle exec $GEM_NAME \$@
+_EOF_
+  chmod +x $APP_BIN
+}
+
+_install_gems() {
+  BUNDLE_GEMFILE=$APP_GEMFILE bundle install --path vendor/bundle
 }
 
 # remove functions
@@ -71,10 +103,15 @@ do
   esac
 done
 
-# check GEM_NAME
+## check GEM_NAME
 if test -z $GEM_NAME; then
   usage
 fi
+
+## install/uninstall proc
+APP_DIR=$GEMAPP_HOME/$GEM_NAME
+APP_GEMFILE=$APP_DIR/Gemfile
+APP_BIN=$GEMAPP_BIN_DIR/$GEM_NAME
 
 if test $REMOVE_FLAG -eq 1; then
   uninstall
