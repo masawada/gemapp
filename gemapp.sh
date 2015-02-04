@@ -12,13 +12,25 @@ fi
 
 # functions
 usage() {
-  echo "Usage: $APP_NAME [-r|--remove] [-g|--git-repo <uri>] <gem_name>"
+  echo "Usage:"
+  echo "Install  : $APP_NAME [-g|--git-repo <uri>] <gem_name>"
+  echo "Uninstall: $APP_NAME [-r|--remove] <gem_name>"
+  echo "App List : $APP_NAME [-l|--list]"
   exit 1
 }
 
 version() {
   echo $VERSION
-  exit 1
+  exit 0
+}
+
+list() {
+  FILES="$GEMAPP_BIN_DIR/*"
+  for filepath in ${FILES}
+  do
+    echo `basename $filepath`
+  done
+  exit 0
 }
 
 validate_option() {
@@ -28,7 +40,7 @@ validate_option() {
   fi
 }
 
-# install functions
+## install functions
 install() {
 
   # check if app already exists
@@ -76,7 +88,7 @@ _install_gems() {
   fi
 }
 
-# remove functions
+## remove functions
 uninstall() {
   # check if app already exists
   if ! test -d $APP_DIR ; then
@@ -108,6 +120,9 @@ do
       ;;
     '-v' | '--version' )
       version
+      ;;
+    '-l' | '--list' )
+      list
       ;;
     '-g' | '--git-repo' )
       validate_option $1 $2
