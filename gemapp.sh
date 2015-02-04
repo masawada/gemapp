@@ -48,5 +48,15 @@ do
       echo "$APP_NAME: illegal option -- '$(echo $1 | sed 's/^-*//')'" 1>&2
       exit 1
       ;;
+    *)
+      if [[ ! -z "$1" ]] && [[ ! "$1" =~ ^-+ ]]; then
+        GEM_NAME="$1"
+      fi
+      ;;
   esac
 done
+
+# check GEM_NAME
+if test -z $GEM_NAME; then
+  usage
+fi
