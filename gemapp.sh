@@ -33,7 +33,7 @@ install() {
 
   # check if app already exists
   if test -d $APP_DIR ; then
-    echo "app ${GEM_NAME} already exists."
+    echo "${GEM_NAME} already exists."
     exit 1
   fi
 
@@ -43,7 +43,7 @@ install() {
   _create_binfile
   _install_gems
 
-  echo 'install' $GEM_NAME
+  echo '🍣 ' $GEM_NAME
 }
 
 _create_gemfile() {
@@ -63,11 +63,32 @@ _EOF_
 
 _install_gems() {
   BUNDLE_GEMFILE=$APP_GEMFILE bundle install --path vendor/bundle
+  if test $? -ne 0 ; then
+    rm -rf $APP_DIR
+    echo "Failed to install $GEM_NAME."
+    exit 1
+  fi
 }
 
 # remove functions
 uninstall() {
-  echo 'uninstall' $GEM_NAME
+  # check if app already exists
+  if ! test -d $APP_DIR ; then
+    echo "${GEM_NAME} not exists."
+    exit 1
+  fi
+
+  echo "Uninstalling ${GEM_NAME}"
+  _remove_app
+  _remove_bin
+}
+
+_remove_app() {
+  rm -rf $APP_DIR
+}
+
+_remove_bin() {
+  rm -rf $APP_BIN
 }
 
 # main
