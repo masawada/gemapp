@@ -8,7 +8,7 @@ GEMAPP
 ## Installation
 drop `gemapp` in your $PATH and `echo "export $HOME/.gemapps/.bin:$PATH" > .*shrc`
 
-All gems are installed in `$HOME/.gemapp`
+All gems are installed in `$HOME/.gemapps`
 
 ## Usage
 ### Install gemapps
